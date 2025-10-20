@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Álbumes de Kanye West</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎵 Álbumes de Kanye West</h1>
+            <p>Descubre todos sus álbumes disponibles</p>
+        </header>
+
+        <div class="quote-section">
+            <p class="quote-text">¿Quieres escuchar alguna frase estúpida de Kanye?</p>
+            <button id="quote-btn" class="quote-btn">Pulsa aquí</button>
+            <div id="quote-display" class="quote-display"></div>
+        </div>
+
+        <div class="loader">
+            <div class="spinner"></div>
+            <p>Cargando álbumes...</p>
+        </div>
+
+        <div id="albums-container" class="albums-grid"></div>
+        <div id="error-container"></div>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            cargarAlbumes();
+            
+            // Evento del botón de frases
+            $('#quote-btn').click(function() {
+                obtenerFrase();
+            });
+        });
+
+        function cargarAlbumes() {
+            $('.loader').show();
+            
+            fetch('https://itunes.apple.com/search?term=kanye+west&entity=album&limit=200')
+                .then(response => response.json())
+                .then(data => {
+                    $('.loader').hide();
+                    
+                    if (data.results && data.results.length > 0) {
+                        // Filtrar solo álbumes únicos
+                        const albumesUnicos = [];
+                        const nombresVistos = new Set();
+                        
+                        data.results.forEach(item => {
+                            if (item.collectionType === 'Album' && !nombresVistos.has(item.collectionName)) {
+                                albumesUnicos.push(item);
+                                nombresVistos.add(item.collectionName);
+                            }
+                        });
+                        
+                        if (albumesUnicos.length > 0) {
+                            mostrarAlbumes(albumesUnicos);
+                        } else {
+                            $('#albums-container').html('<div class="no-results">No se encontraron álbumes</div>');
+                        }
+                    } else {
+                        $('#albums-container').html('<div class="no-results">No se encontraron álbumes</div>');
+                    }
+                })
+                .catch(error => {
+                    $('.loader').hide();
+                    console.log(error);
+                    $('#error-container').html('<div class="error">Error al cargar los álbumes. Verifica tu conexión e intenta de nuevo.</div>');
+                });
+        }
+
+        function mostrarAlbumes(albumes) {
+            let html = '';
+            
+            albumes.forEach(function(album) {
+                const titulo = album.collectionName || 'Sin título';
+                const artista = album.artistName || 'Artista desconocido';
+                const imagen = album.artworkUrl100 ? album.artworkUrl100.replace('100x100', '250x250') : '';
+                const url = album.collectionViewUrl || '#';
+                const año = album.releaseDate ? new Date(album.releaseDate).getFullYear() : 'N/A';
+                const canciones = album.trackCount || 0;
+                
+                html += `
+                    <div class="album-card">
+                        <img src="${imagen}" alt="${titulo}" class="album-image">
+                        <div class="album-info">
+                            <div class="album-title">${titulo}</div>
+                            <div class="album-artist">${artista}</div>
+                            <div class="album-year">📅 ${año}</div>
+                            <div class="album-tracks">🎵 ${canciones} canciones</div>
+                            <a href="${url}" target="_blank" class="album-link">Ver en iTunes</a>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            $('#albums-container').html(html);
+        }
+
+        function obtenerFrase() {
+            $('#quote-btn').prop('disabled', true);
+            $('#quote-display').text('Cargando frase...');
+            
+            fetch('https://api.kanye.rest/')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Error en la respuesta');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Datos recibidos:', data);
+                    if (data.quote) {
+                        $('#quote-display').text('"' + data.quote + '"');
+                    } else {
+                        $('#quote-display').text('No se pudo obtener la frase');
+                    }
+                    $('#quote-btn').prop('disabled', false);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    $('#quote-display').text('Error al obtener la frase. Intenta de nuevo.');
+                    $('#quote-btn').prop('disabled', false);
+                });
+        }
+    </script>
+</body>
+</html>

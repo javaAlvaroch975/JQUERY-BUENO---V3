@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Votador de Canciones - Kanye West</title>
+    <link rel="stylesheet" href="indexform.css">
+</head>
+<body>
+    <div class="container">
+        <h1>🎵 ¿Te gusta esta canción?</h1>
+        <p class="subtitle">Vota y ayúdanos a conocer tus preferencias</p>
+
+        <div class="loader" id="loader">Obteniendo canción...</div>
+        <div class="message" id="message"></div>
+
+        <div id="form-container" style="display: none;">
+            <div class="song-info">
+                <div class="song-title" id="songTitle">Canción</div>
+                <div class="song-artist" id="songArtist">Artista</div>
+                <div class="song-album" id="songAlbum">Álbum</div>
+            </div>
+
+            <form id="voteForm">
+                <div class="form-group">
+                    <label>¿Te gusta esta canción?</label>
+                    <div class="vote-options">
+                        <button type="button" class="vote-btn yes" data-vote="si">
+                            👍 Sí
+                        </button>
+                        <button type="button" class="vote-btn no" data-vote="no">
+                            👎 No
+                        </button>
+                    </div>
+                </div>
+
+                <input type="hidden" id="voteInput" value="">
+
+                <button type="submit" class="submit-btn" id="submitBtn">
+                    Enviar voto
+                </button>
+            </form>
+
+            <div class="stats" id="stats">
+                <h3>Tus votos 📊</h3>
+                <p>Votos totales: <strong id="totalVotes">0</strong></p>
+                <p>Gustaron: <strong id="likeVotes">0</strong> 👍</p>
+                <p>No gustaron: <strong id="dislikeVotes">0</strong> 👎</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        // Variables globales
+        let votoSeleccionado = null;
+        let votos = {
+            si: 0,
+            no: 0
+        };
+
+        // Cuando la página está lista
+        $(document).ready(function() {
+            obtenerCancion();
+            
+            // Evento de los botones de voto
+            $('.vote-btn').click(function() {
+                seleccionarVoto($(this));
+            });
+
+            // Evento del formulario
+            $('#voteForm').submit(function(e) {
+                e.preventDefault();
+                enviarVoto();
+            });
+        });
+
+        // FUNCIÓN 1: Obtener una canción aleatoria
+        // Retorna una PROMESA
+        function obtenerCancion() {
+            $('#loader').show();
+            $('#form-container').hide();
+
+            // Promesa: es como decir "voy a hacer algo que tardará tiempo"
+            // .then() es lo que pasa si todo va bien
+            // .catch() es lo que pasa si hay error
+
+            obtenerCancionDeKanye()
+                .then(function(cancion) {
+                    console.log('Canción obtenida:', cancion);
+                    mostrarCancion(cancion);
+                    $('#loader').hide();
+                    $('#form-container').show();
+                })
+                .catch(function(error) {
+                    console.error('Error:', error);
+                    mostrarMensaje('Error al obtener la canción', 'error');
+                    $('#loader').hide();
+                });
+        }
+
+        // FUNCIÓN 2: Llamada a la API para obtener canciones
+        // Esta función RETORNA una PROMESA
+        function obtenerCancionDeKanye() {
+            // return new Promise es como decir "voy a prometer algo"
+            return new Promise(function(resolve, reject) {
+                // resolve = si todo va bien
+                // reject = si hay error
+
+                $.ajax({
+                    url: 'https://itunes.apple.com/search?term=kanye+west&entity=song&limit=100',
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(data) {
+                        // Si la petición fue exitosa
+                        if (data.results && data.results.length > 0) {
+                            // Escoger una canción aleatoria
+                            let cancionAleatoria = data.results[Math.floor(Math.random() * data.results.length)];
+                            
+                            // resolve() = cumplir la promesa (todo bien!)
+                            resolve(cancionAleatoria);
+                        } else {
+                            // Si no hay resultados, rechazar la promesa
+                            reject('No se encontraron canciones');
+                        }
+                    },
+                    error: function() {
+                        // Si hay error en la petición, rechazar la promesa
+                        reject('Error en la conexión');
+                    }
+                });
+            });
+        }
+
+        // FUNCIÓN 3: Mostrar la canción en el formulario
+        function mostrarCancion(cancion) {
+            $('#songTitle').text(cancion.trackName || 'Canción desconocida');
+            $('#songArtist').text(cancion.artistName || 'Artista desconocido');
+            $('#songAlbum').text(cancion.collectionName || 'Álbum desconocido');
+            
+            // Resetear voto
+            votoSeleccionado = null;
+            $('#voteInput').val('');
+            $('.vote-btn').removeClass('selected');
+        }
+
+        // FUNCIÓN 4: Seleccionar un voto
+        function seleccionarVoto(boton) {
+            // Remover la clase "selected" de todos los botones
+            $('.vote-btn').removeClass('selected');
+            
+            // Agregar la clase "selected" al botón clickeado
+            boton.addClass('selected');
+            
+            // Guardar qué voto fue seleccionado
+            votoSeleccionado = boton.data('vote');
+            $('#voteInput').val(votoSeleccionado);
+            
+            console.log('Voto seleccionado:', votoSeleccionado);
+        }
+
+        // FUNCIÓN 5: Enviar el voto
+        // También usa PROMESAS
+        function enviarVoto() {
+            if (!votoSeleccionado) {
+                mostrarMensaje('Por favor, selecciona un voto', 'error');
+                return;
+            }
+
+            // Deshabilitar el botón mientras se envía
+            $('#submitBtn').prop('disabled', true);
+
+            // Llamar a la función que retorna una promesa
+            guardarVoto(votoSeleccionado)
+                .then(function(respuesta) {
+                    console.log('Voto guardado:', respuesta);
+                    
+                    // Actualizar contador
+                    if (votoSeleccionado === 'si') {
+                        votos.si++;
+                    } else {
+                        votos.no++;
+                    }
+
+                    // Mostrar mensaje de éxito
+                    mostrarMensaje('¡Voto registrado! ✨', 'success');
+                    
+                    // Actualizar estadísticas
+                    actualizarEstadisticas();
+                    
+                    // Cargar nueva canción después de 2 segundos
+                    setTimeout(function() {
+                        obtenerCancion();
+                    }, 2000);
+                    
+                    $('#submitBtn').prop('disabled', false);
+                })
+                .catch(function(error) {
+                    console.error('Error al guardar:', error);
+                    mostrarMensaje('Error al registrar el voto', 'error');
+                    $('#submitBtn').prop('disabled', false);
+                });
+        }
+
+        // FUNCIÓN 6: Guardar el voto (retorna una PROMESA)
+        function guardarVoto(voto) {
+            // Esta promesa simula guardar los datos
+            // En un proyecto real, aquí enviarías los datos a un servidor
+            return new Promise(function(resolve, reject) {
+                // Simular un pequeño delay (como si enviara a un servidor)
+                setTimeout(function() {
+                    // Simular que todo salió bien
+                    resolve({
+                        mensaje: 'Voto guardado correctamente',
+                        voto: voto,
+                        timestamp: new Date().toLocaleString()
+                    });
+                }, 1000);
+            });
+        }
+
+        // FUNCIÓN 7: Mostrar mensajes
+        function mostrarMensaje(texto, tipo) {
+            $('#message')
+                .removeClass('success error')
+                .addClass(tipo)
+                .text(texto);
+
+            // Hacer desaparecer el mensaje después de 3 segundos
+            setTimeout(function() {
+                $('#message').removeClass('success error');
+            }, 3000);
+        }
+
+        // FUNCIÓN 8: Actualizar estadísticas
+        function actualizarEstadisticas() {
+            let total = votos.si + votos.no;
+            $('#totalVotes').text(total);
+            $('#likeVotes').text(votos.si);
+            $('#dislikeVotes').text(votos.no);
+            $('#stats').show();
+        }
+    </script>
+</body>
+</html>

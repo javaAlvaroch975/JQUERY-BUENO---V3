@@ -50,10 +50,10 @@
             $('.loader').show(); //mostrar el div de antes
             
             // API iTunes -> álbumes de Kanye West
-            var urlDeLaAPI = 'https://itunes.apple.com/search?term=kanye+west&entity=album&limit=200';
+            var APIiTunes = 'https://itunes.apple.com/search?term=kanye+west&entity=album&limit=200';
             
             // TRAER DATOS Y CONVERTIRLOS A JSON
-            fetch(urlDeLaAPI)
+            fetch(APIiTunes)
                 .then(function(respuesta) {
                     return respuesta.json();
                 })
@@ -64,185 +64,187 @@
                     // Comprobante para ver si coge los datos
                     if (datos.results && datos.results.length > 0) {
                         // Array para los álbumes únicos
-                        var albumesUnicosArray = [];
+                        var albumes_Unicos = [];
+
                         // Array para guardar los nombres que ya han salido
-                        var nombresQueYaVimos = []; //refactorizar el nombre a otro
+                        var albumes_Vistos = []; 
                         
                         // Recorrer los resultados
                         for (var i = 0; i < datos.results.length; i++) {
-                            var albumActual = datos.results[i];
-                            var nombreDelAlbum = albumActual.collectionName;
+                            var album_Actual = datos.results[i];
+                            var album_Nombre = album_Actual.collectionName;
                             
                             // Comprobante para que no sean repetidos
-                            if (albumActual.collectionType === 'Album') {
-                                var yaExiste = false; //refactorizar el nombre a otro
-                                for (var j = 0; j < nombresQueYaVimos.length; j++) {
-                                    if (nombresQueYaVimos[j] === nombreDelAlbum) {
-                                        yaExiste = true;
+                            if (album_Actual.collectionType === 'Album') {
+                                var anyadido = false; //refactorizar el nombre a otro
+                                for (var j = 0; j < albumes_Vistos.length; j++) {
+                                    if (albumes_Vistos[j] === album_Nombre) {
+                                        anyadido = true;
                                         break;
                                     }
                                 }
                                 
                                 // Añadirlo si no existe
-                                if (yaExiste === false) {
-                                    albumesUnicosArray.push(albumActual);
-                                    nombresQueYaVimos.push(nombreDelAlbum);
+                                if (anyadido === false) {
+                                    albumes_Unicos.push(album_Actual);
+                                    albumes_Vistos.push(album_Nombre);
                                 }
                             }
                         }
                         
                         // Mostrar los albumes unicos
-                        if (albumesUnicosArray.length > 0) {
-                            mostrarAlbumes(albumesUnicosArray);
+                        if (albumes_Unicos.length > 0) {
+                            mostrar_Albumes(albumes_Unicos);
                         } else {
-                            // Si no hay álbumes, mostrar mensaje
-                            var mensajeNoResultados = '<div class="no-results">No se encontraron álbumes</div>';
-                            $('#albums-container').html(mensajeNoResultados);
+                            // Si no hay albumes porque no los ha cogido
+                            var no_unicos = '<div class="no-results">No se encontraron albumes</div>';
+                            $('#albums-container').html(no_unicos);
                         }
                     } else {
-                        // Si no hay resultados, mostrar mensaje
-                        var mensajeNoResultados2 = '<div class="no-results">No se encontraron álbumes</div>';
-                        $('#albums-container').html(mensajeNoResultados2);
+                        // Si no coge los datos al llamar la API
+                        var no_obtenidos = '<div class="no-results">No se encontraron albumes</div>';
+                        $('#albums-container').html(no_obtenidos);
                     }
                 })
                 .catch(function(error) {
                     // Si hay un error, ocultamos el loader
                     $('.loader').hide();
                     // Mostrar el error en la consola
-                    console.log('Hubo un error:', error);
+                    console.log('Hubo un error al cargar los albumes:', error);
                     // Mostrar mensaje de error al usuario
-                    var mensajeDeError = '<div class="error">Error al cargar los álbumes. Verifica tu conexión e intenta de nuevo.</div>';
+                    var mensajeDeError = '<div class="error">Error al cargar los albumes.</div>';
                     $('#error-container').html(mensajeDeError);
                 });
         }
 
         // FUNCIÓN PARA MOSTRAR ALBUMES
-        function mostrarAlbumes(albumesParaMostrar) {
+        function mostrar_Albumes(albumes) {
             // Variable para guardar todo el HTML que vamos a crear
             var htmlCompleto = '';
             
-            // Recorrer cada álbum uno por uno
-            for (var indice = 0; indice < albumesParaMostrar.length; indice++) {
-                // Guardar el álbum actual en una variable
-                var elAlbum = albumesParaMostrar[indice];
+            // Recorrer los albumes
+            for (var indice = 0; indice < albumes.length; indice++) {
+                var album_Seleccionado = albumes[indice];
                 
-                // Obtener el título del álbum
-                var tituloDelAlbum = '';
-                if (elAlbum.collectionName) {
-                    tituloDelAlbum = elAlbum.collectionName;
+                // Obtener titulo
+                var album_Titulo = '';
+                if (album_Seleccionado.collectionName) {
+                    album_Titulo = album_Seleccionado.collectionName;
                 } else {
-                    tituloDelAlbum = 'Sin título';
+                    album_Titulo = 'Sin título';
                 }
                 
-                // Obtener el nombre del artista
-                var nombreDelArtista = '';
-                if (elAlbum.artistName) {
-                    nombreDelArtista = elAlbum.artistName;
+                // Obtener nombre 
+                var album_Artista = '';
+                if (album_Seleccionado.artistName) {
+                    album_Artista = album_Seleccionado.artistName;
                 } else {
-                    nombreDelArtista = 'Artista desconocido';
+                    album_Artista = 'Artista desconocido';
                 }
                 
-                // Obtener la imagen del álbum
-                var imagenDelAlbum = '';
-                if (elAlbum.artworkUrl100) {
-                    // Cambiar el tamaño de la imagen a 250x250
-                    imagenDelAlbum = elAlbum.artworkUrl100.replace('100x100', '250x250');
+                // Obtener la imagen
+                var album_Imagen = '';
+                if (album_Seleccionado.artworkUrl100) {
+                    // Uso 250x250 para ir de 4 en 4 y que no sea muy grande
+                    album_Imagen = album_Seleccionado.artworkUrl100.replace('100x100', '250x250');
                 } else {
-                    imagenDelAlbum = '';
+                    album_Imagen = '';
                 }
                 
-                // Obtener la URL del álbum en iTunes
-                var urlEnItunes = '';
-                if (elAlbum.collectionViewUrl) {
-                    urlEnItunes = elAlbum.collectionViewUrl;
+                // Obtener la URL de itunes
+                var album_Url = '';
+                if (album_Seleccionado.collectionViewUrl) {
+                    album_Url = album_Seleccionado.collectionViewUrl;
                 } else {
-                    urlEnItunes = '#';
+                    album_Url = '#';
                 }
                 
                 // Obtener el año de lanzamiento
-                var añoDelAlbum = 'N/A';
-                if (elAlbum.releaseDate) {
-                    var fechaCompleta = new Date(elAlbum.releaseDate);
-                    añoDelAlbum = fechaCompleta.getFullYear();
+                var album_Año = 'N/A';
+                if (album_Seleccionado.releaseDate) {
+                    var fecha = new Date(album_Seleccionado.releaseDate);
+                    album_Año = fecha.getFullYear();
                 }
                 
-                // Obtener el número de canciones
-                var numeroDeCanciones = 0;
-                if (elAlbum.trackCount) {
-                    numeroDeCanciones = elAlbum.trackCount;
+                // Obtener el numero de canciones
+                var numero_Canciones = 0;
+                if (album_Seleccionado.trackCount) {
+                    numero_Canciones = album_Seleccionado.trackCount;
                 }
                 
-                // Crear el HTML para esta tarjeta de álbum
-                var htmlDeLaTarjeta = '';
-                htmlDeLaTarjeta = htmlDeLaTarjeta + '<div class="album-card">';
-                htmlDeLaTarjeta = htmlDeLaTarjeta + '<img src="' + imagenDelAlbum + '" alt="' + tituloDelAlbum + '" class="album-image">';
-                htmlDeLaTarjeta = htmlDeLaTarjeta + '<div class="album-info">';
-                htmlDeLaTarjeta = htmlDeLaTarjeta + '<div class="album-title">' + tituloDelAlbum + '</div>';
-                htmlDeLaTarjeta = htmlDeLaTarjeta + '<div class="album-artist">' + nombreDelArtista + '</div>';
-                htmlDeLaTarjeta = htmlDeLaTarjeta + '<div class="album-year">📅 ' + añoDelAlbum + '</div>';
-                htmlDeLaTarjeta = htmlDeLaTarjeta + '<div class="album-tracks">🎵 ' + numeroDeCanciones + ' canciones</div>';
-                htmlDeLaTarjeta = htmlDeLaTarjeta + '<a href="' + urlEnItunes + '" target="_blank" class="album-link">Ver en iTunes</a>';
-                htmlDeLaTarjeta = htmlDeLaTarjeta + '</div>';
-                htmlDeLaTarjeta = htmlDeLaTarjeta + '</div>';
+                // TARJETAS DE ALBUMES (html completo + campos)
+                var tarjeta_Album = '';
+                tarjeta_Album = tarjeta_Album + '<div class="album-card">';
+                tarjeta_Album = tarjeta_Album + '<img src="' + album_Imagen + '" alt="' + album_Titulo + '" class="album-image">';
+                tarjeta_Album = tarjeta_Album + '<div class="album-info">';
+                tarjeta_Album = tarjeta_Album + '<div class="album-title">' + album_Titulo + '</div>';
+                tarjeta_Album = tarjeta_Album + '<div class="album-artist">' + album_Artista + '</div>';
+                tarjeta_Album = tarjeta_Album + '<div class="album-year">📅 ' + album_Año + '</div>';
+                tarjeta_Album = tarjeta_Album + '<div class="album-tracks">🎵 ' + numero_Canciones + ' canciones</div>';
+                tarjeta_Album = tarjeta_Album + '<a href="' + album_Url + '" target="_blank" class="album-link">Ver en iTunes</a>';
+                tarjeta_Album = tarjeta_Album + '</div>';
+                tarjeta_Album = tarjeta_Album + '</div>';
                 
                 // Añadir esta tarjeta al HTML completo
-                htmlCompleto = htmlCompleto + htmlDeLaTarjeta;
+                htmlCompleto = htmlCompleto + tarjeta_Album;
             }
             
-            // Poner todo el HTML en el contenedor de álbumes
+            // Poner todo el HTML en el contenedor de albumes
             $('#albums-container').html(htmlCompleto);
         }
 
         // FUNCION PARA LAS FRASES DE KANYE
         function obtenerFrase() {
-            // Deshabilitar el botón para que no se pueda hacer click múltiples veces
-            var botonDeFrases = $('#quote-btn');
-            botonDeFrases.prop('disabled', true);
+            // Deshabilitar el boton para evitar multiples clciks
+            var boton_frases_Kayne = $('#quote-btn');
+            boton_frases_Kayne.prop('disabled', true);
             
             // Mostrar mensaje de carga
-            var divDeFrases = $('#quote-display');
-            divDeFrases.text('Cargando frase...');
+            var frases_Kayne = $('#quote-display');
+            frases_Kayne.text('Cargando frase...');
             
             // URL de la API de frases de Kanye
-            var urlDeLaAPIDeKanye = 'https://api.kanye.rest/';
+            var APIKayne = 'https://api.kanye.rest/';
             
-            // Hacer la petición a la API
-            fetch(urlDeLaAPIDeKanye)
-                .then(function(respuestaDelServidor) {
-                    // Verificar si la respuesta está bien
-                    if (respuestaDelServidor.ok === false) {
+            // PETICIONES A LA API
+            fetch(APIKayne)
+                .then(function(server_Response) {
+                    // Comprobar si lo que recibimos es correcto
+                    if (server_Response.ok === false) {
                         throw new Error('Error en la respuesta');
                     }
                     // Convertir a JSON
-                    return respuestaDelServidor.json();
+                    return server_Response.json();
                 })
-                .then(function(datosRecibidos) {
+                .then(function(frase_Recibida) {
                     // Mostrar en consola lo que recibimos
-                    console.log('Datos recibidos:', datosRecibidos);
+                    console.log('Datos recibidos:', frase_Recibida);
                     
                     // Verificar si hay una frase
-                    if (datosRecibidos.quote) {
-                        // Obtener la frase
-                        var laFrase = datosRecibidos.quote;
-                        // Agregarle comillas
-                        var fraseConComillas = '"' + laFrase + '"';
+                    if (frase_Recibida.quote) {
+                        // Obtener la frase y meterle comillas
+                        var frase = frase_Recibida.quote;
+                        var frase_completa = '"' + frase + '"';
+                        
                         // Mostrarla en la página
-                        divDeFrases.text(fraseConComillas);
+                        frases_Kayne.text(frase_completa);
                     } else {
-                        // Si no hay frase, mostrar error
-                        divDeFrases.text('No se pudo obtener la frase');
+                        // Mostrar error si no coge la frase
+                        frases_Kayne.text('No se pudo obtener la frase');
                     }
                     
                     // Volver a habilitar el botón
-                    botonDeFrases.prop('disabled', false);
+                    boton_frases_Kayne.prop('disabled', false);
                 })
                 .catch(function(errorQueOcurrio) {
                     // Mostrar el error en consola
                     console.error('Error:', errorQueOcurrio);
+
                     // Mostrar mensaje de error
-                    divDeFrases.text('Error al obtener la frase. Intenta de nuevo.');
+                    frases_Kayne.text('Error al obtener la frase.');
+
                     // Volver a habilitar el botón
-                    botonDeFrases.prop('disabled', false);
+                    boton_frases_Kayne.prop('disabled', false);
                 });
         }
     </script>

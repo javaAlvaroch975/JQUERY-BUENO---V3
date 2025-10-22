@@ -1,117 +1,73 @@
-/* Resetear todos los estilos por defecto del navegador */
 * {
-    margin: 0px;
-    padding: 0px;
+    margin: 0;
+    padding: 0;
     box-sizing: border-box;
 }
 
-/* Estilos para el body (todo el fondo) */
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: Arial, sans-serif;
     background-color: #667eea;
     min-height: 100vh;
-    padding-top: 20px;
-    padding-bottom: 20px;
-    padding-left: 20px;
-    padding-right: 20px;
+    padding: 20px;
 }
 
-/* Contenedor principal que centra todo */
 .container {
     max-width: 1200px;
-    margin-left: auto;
-    margin-right: auto;
+    margin: 0 auto;
 }
 
-/* Estilos para la cabecera */
 header {
     text-align: center;
     color: white;
     margin-bottom: 40px;
-    padding-top: 30px;
-    padding-bottom: 30px;
+    padding: 30px 0;
 }
 
-/* Título principal de la página */
 header h1 {
     font-size: 2.5em;
     margin-bottom: 10px;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
 }
 
-/* Subtítulo debajo del título */
 header p {
     font-size: 1.1em;
-    opacity: 0.9;
     margin-bottom: 20px;
 }
 
-/* Botón de navegación para ir a votar canciones */
 .nav-btn {
     display: inline-block;
     background-color: #9b59b6;
     color: white;
-    padding-top: 12px;
-    padding-bottom: 12px;
-    padding-left: 30px;
-    padding-right: 30px;
-    border-radius: 8px;
+    padding: 12px 30px;
     text-decoration: none;
     font-weight: 600;
-    transition: all 0.3s ease;
     margin-top: 15px;
 }
 
-/* Cuando pasas el ratón por encima del botón */
 .nav-btn:hover {
     background-color: #8e44ad;
-    transform: scale(1.05);
-    box-shadow: 0 5px 15px rgba(155, 89, 182, 0.4);
 }
 
-/* Cuando haces click en el botón */
-.nav-btn:active {
-    transform: scale(0.98);
-}
-
-/* Contenedor del spinner de carga */
 .loader {
     text-align: center;
     color: white;
     display: none;
-    margin-top: 40px;
-    margin-bottom: 40px;
+    margin: 40px 0;
 }
 
-/* El spinner que gira */
 .spinner {
-    border-width: 4px;
-    border-style: solid;
-    border-color: rgba(255, 255, 255, 0.3);
+    border: 4px solid rgba(255, 255, 255, 0.3);
     border-top-color: white;
-    border-radius: 50%;
     width: 40px;
     height: 40px;
-    animation-name: spin;
-    animation-duration: 1s;
-    animation-timing-function: linear;
-    animation-iteration-count: infinite;
-    margin-left: auto;
-    margin-right: auto;
-    margin-bottom: 15px;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 15px;
 }
 
-/* Animación para hacer girar el spinner */
 @keyframes spin {
-    0% { 
-        transform: rotate(0deg); 
-    }
-    100% { 
-        transform: rotate(360deg); 
-    }
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }
 
-/* Grid para mostrar los álbumes */
 .albums-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -119,25 +75,16 @@ header p {
     margin-top: 30px;
 }
 
-/* Tarjeta de cada álbum */
 .album-card {
     background-color: white;
-    border-radius: 10px;
     overflow: hidden;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-    transition-property: transform, box-shadow;
-    transition-duration: 0.3s;
-    transition-timing-function: ease;
-    cursor: pointer;
+    border-radius: 10px;
 }
 
-/* Cuando pasas el ratón por encima de una tarjeta */
 .album-card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+    opacity: 0.9;
 }
 
-/* Imagen del álbum */
 .album-image {
     width: 100%;
     height: 250px;
@@ -145,22 +92,18 @@ header p {
     background-color: #f0f0f0;
 }
 
-/* Información del álbum */
 .album-info {
     padding: 20px;
 }
 
-/* Título del álbum */
 .album-title {
     font-size: 1.1em;
     font-weight: bold;
     color: #333;
     margin-bottom: 8px;
-    line-height: 1.3;
     min-height: 50px;
 }
 
-/* Nombre del artista */
 .album-artist {
     color: #667eea;
     font-size: 0.95em;
@@ -168,58 +111,43 @@ header p {
     font-weight: 600;
 }
 
-/* Año de lanzamiento */
 .album-year {
     color: #888;
     font-size: 0.9em;
     margin-bottom: 12px;
 }
 
-/* Número de canciones */
 .album-tracks {
     color: #666;
     font-size: 0.9em;
     margin-bottom: 15px;
-    padding-top: 8px;
-    padding-bottom: 8px;
+    padding: 8px 0;
     border-top: 1px solid #eee;
     border-bottom: 1px solid #eee;
 }
 
-/* Link para ver en iTunes */
 .album-link {
-    display: inline-block;
+    display: block;
     background-color: #667eea;
     color: white;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    padding-left: 15px;
-    padding-right: 15px;
-    border-radius: 5px;
+    padding: 10px 15px;
     text-decoration: none;
     font-size: 0.9em;
-    transition: background-color 0.3s ease;
-    width: 100%;
     text-align: center;
 }
 
-/* Cuando pasas el ratón por el link */
 .album-link:hover {
     background-color: #764ba2;
-    text-decoration: none;
 }
 
-/* Mensaje de error */
 .error {
     background-color: #ff6b6b;
     color: white;
     padding: 15px;
-    border-radius: 5px;
     text-align: center;
     margin-top: 20px;
 }
 
-/* Mensaje cuando no hay resultados */
 .no-results {
     text-align: center;
     color: white;
@@ -227,59 +155,35 @@ header p {
     padding: 40px;
 }
 
-/* Sección de las frases de Kanye */
 .quote-section {
     background-color: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
     padding: 30px;
-    border-radius: 15px;
     text-align: center;
     margin-bottom: 40px;
-    border-width: 1px;
-    border-style: solid;
-    border-color: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
-/* Texto que pregunta si quieres ver una frase */
 .quote-text {
     color: white;
     font-size: 1.3em;
     margin-bottom: 20px;
-    font-weight: 500;
 }
 
-/* Botón para obtener frases */
 .quote-btn {
     background-color: #ff6b6b;
     color: white;
-    padding-top: 12px;
-    padding-bottom: 12px;
-    padding-left: 30px;
-    padding-right: 30px;
+    padding: 12px 30px;
     border: none;
-    border-radius: 8px;
     font-size: 1em;
     font-weight: 600;
     cursor: pointer;
-    transition-property: all;
-    transition-duration: 0.3s;
-    transition-timing-function: ease;
     margin-bottom: 20px;
 }
 
-/* Cuando pasas el ratón por el botón de frases */
 .quote-btn:hover {
     background-color: #ff5252;
-    transform: scale(1.05);
-    box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
 }
 
-/* Cuando haces click en el botón de frases */
-.quote-btn:active {
-    transform: scale(0.98);
-}
-
-/* Donde se muestra la frase */
 .quote-display {
     color: white;
     font-size: 1.1em;
@@ -287,8 +191,5 @@ header p {
     padding: 20px;
     min-height: 40px;
     background-color: rgba(255, 255, 255, 0.1);
-    border-radius: 8px;
-    border-left-width: 4px;
-    border-left-style: solid;
-    border-left-color: #ff6b6b;
+    border-left: 4px solid #ff6b6b;
 }

@@ -4,21 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Votador de Canciones - Kanye West</title>
+    <link rel="icon" type="image/jpeg" href="prelo.jpg">
     <link rel="stylesheet" href="indexform.css">
 </head>
 <body>
     <div class="container">
-        <h1>🎵 ¿Te gusta esta canción?</h1>
+        <h1>🎵 ¿Te gusta esta cancion? 🎵</h1>
         <p class="subtitle">Vota</p>
+        <a href="index.html" class="back-btn">⬅️ Volver a Álbumes</a>
 
-        <div class="loader" id="loader">Obteniendo canción...</div>
+        <div class="loader" id="loader">Obteniendo cancion</div>
         <div class="message" id="message"></div>
 
         <div id="form-container" style="display: none;">
             <div class="song-info">
-                <div class="song-title" id="songTitle">Canción</div>
+                <div class="song-title" id="songTitle">Cancion</div>
                 <div class="song-artist" id="songArtist">Artista</div>
-                <div class="song-album" id="songAlbum">Álbum</div>
+                <div class="song-album" id="songAlbum">Album</div>
             </div>
 
             <form id="voteForm">
@@ -26,10 +28,10 @@
                     <label>¿Te gusta esta canción?</label>
                     <div class="vote-options">
                         <button type="button" class="vote-btn yes" data-vote="si">
-                            👍 Sí
+                            Si
                         </button>
                         <button type="button" class="vote-btn no" data-vote="no">
-                            👎 No
+                            No
                         </button>
                     </div>
                 </div>
@@ -42,10 +44,10 @@
             </form>
 
             <div class="stats" id="stats">
-                <h3>Tus votos 📊</h3>
-                <p>Votos totales: <strong id="totalVotes">0</strong></p>
-                <p>Me gusta: <strong id="likeVotes">0</strong> 👍</p>
-                <p>No me gusta: <strong id="dislikeVotes">0</strong> 👎</p>
+                <h3>Tus votos: </h3>
+                <p>Votos totales: <strong id="votos_Totales">0</strong></p>
+                <p>Me gusta :D : <strong id="votos_Buenos">0</strong></p>
+                <p>No me gusta D: : <strong id="votos_Malos">0</strong></p>
             </div>
         </div>
     </div>
@@ -207,7 +209,6 @@
                 .addClass(tipo)
                 .text(texto);
 
-            // Borrar mensaje 3s
             setTimeout(function() {
                 $('#message').removeClass('success error');
             }, 3000);
@@ -216,9 +217,9 @@
         // ACTUALIZAR TODAS LAS ESTADISTICAS
         function actualizarEstadisticas() {
             let total = votos.si + votos.no;
-            $('#totalVotes').text(total);
-            $('#likeVotes').text(votos.si);
-            $('#dislikeVotes').text(votos.no);
+            $('#votos_Totales').text(total);
+            $('#votos_Buenos').text(votos.si);
+            $('#votos_Malos').text(votos.no);
             $('#stats').show();
         }
     </script>

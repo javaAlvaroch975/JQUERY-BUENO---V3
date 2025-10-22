@@ -110,7 +110,7 @@
                     // Si hay un error, ocultamos el loader
                     $('.loader').hide();
                     // Mostrar el error en la consola
-                    console.log('Hubo un error:', error);
+                    console.log('Hubo un error al cargar los albumes:', error);
                     // Mostrar mensaje de error al usuario
                     var mensaje_Error = '<div class="error">Error al cargar los albumes.</div>';
                     $('#error-container').html(mensaje_Error);
@@ -118,7 +118,7 @@
         }
 
         // FUNCIÓN PARA MOSTRAR ALBUMES
-        function mostrarAlbumes(albumesParaMostrar) {
+        function mostrar_Albumes(albumes) {
             // Variable para guardar todo el HTML que vamos a crear
             var html_Completo = '';
             
@@ -134,6 +134,7 @@
                     album_Titulo = album_Actual.collectionName;
                 } else {
                     album_Titulo = 'Sin título';
+                    album_Titulo = 'Sin título';
                 }
                 
                 // nombre
@@ -141,6 +142,7 @@
                 if (album_Actual.artistName) {
                     album_Artista = album_Actual.artistName;
                 } else {
+                    album_Artista = 'Artista desconocido';
                     album_Artista = 'Artista desconocido';
                 }
                 
@@ -150,6 +152,7 @@
                     // Cambiar el tamaño de la imagen a 250x250
                     album_Imagen = album_Actual.artworkUrl100.replace('100x100', '250x250');
                 } else {
+                    album_Imagen = '';
                     album_Imagen = '';
                 }
                 

@@ -28,7 +28,7 @@ body {
 
 h1 {
     text-align: center;
-    color: #667eea;
+    color: #8B4513;
     margin-bottom: 10px;
     font-size: 2em;
 }
@@ -55,7 +55,7 @@ h1 {
 }
 
 .song-artist {
-    color: #667eea;
+    color: #C41E3A;
     font-size: 1em;
     margin-bottom: 8px;
 }
@@ -94,7 +94,7 @@ label {
 }
 
 .vote-btn:hover {
-    border-color: #667eea;
+    border-color: #C41E3A;
     background: #f0f0f0;
 }
 
@@ -117,15 +117,15 @@ label {
 }
 
 .vote-btn.selected {
-    background: #667eea;
+    background: #C41E3A;
     color: white;
-    border-color: #667eea;
+    border-color: #C41E3A;
 }
 
 .submit-btn {
     width: 100%;
     padding: 15px;
-    background-color: #667eea;
+    background-color: #C41E3A;
     color: white;
     border: none;
     font-size: 1.1em;
@@ -134,7 +134,7 @@ label {
 }
 
 .submit-btn:hover {
-    background-color: #764ba2;
+    background-color: #A01729;
 }
 
 .submit-btn:disabled {
@@ -144,7 +144,7 @@ label {
 
 .loader {
     text-align: center;
-    color: #667eea;
+    color: #C41E3A;
     font-size: 1.1em;
     margin-bottom: 20px;
     display: none;
@@ -194,7 +194,7 @@ label {
 
 .back-btn {
     display: inline-block;
-    background-color: #9b59b6;
+    background-color: #C41E3A;
     color: white;
     padding: 12px 30px;
     text-decoration: none;
@@ -205,5 +205,5 @@ label {
 }
 
 .back-btn:hover {
-    background-color: #8e44ad;
+    background-color: #A01729;
 }

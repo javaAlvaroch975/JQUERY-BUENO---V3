@@ -50,7 +50,7 @@
         function cargarAlbumes() {
             $('.loader').show(); //mostrar el div de antes
             
-            // API iTunes -> álbumes de Kanye West
+            // API iTunes -> albumes de Kanye West
             var api_Itunes = 'https://itunes.apple.com/search?term=kanye+west&entity=album&limit=200';
             
             // TRAER DATOS Y CONVERTIRLOS A JSON
@@ -64,7 +64,7 @@
                     
                     // Comprobante para ver si coge los datos
                     if (datos.results && datos.results.length > 0) {
-                        // Array para los álbumes únicos
+                        // Array para los albumes unicos
                         var albumes_Unicos = [];
                         // Array para guardar los nombres que ya han salido
                         var albumes_Vistos = [];
@@ -94,9 +94,9 @@
                         
                         // Mostrar los albumes unicos
                         if (albumes_Unicos.length > 0) {
-                            mostrarAlbumes(albumes_Unicos);
+                            mostrar_Albumes(albumes_Unicos);
                         } else {
-                            // Si no hay álbumes, mostrar mensaje
+                            // Si no hay albumes, mostrar mensaje
                             var no_Obtenido = '<div class="no-results">No ha cogido los albumes</div>';
                             $('#albums-container').html(no_Obtenido);
                         }
@@ -117,15 +117,15 @@
                 });
         }
 
-        // FUNCIÓN PARA MOSTRAR ALBUMES
-        function mostrar_Albumes(albumes) {
+        // FUNCION PARA MOSTRAR ALBUMES
+        function mostrar_Albumes(albumes_kayne) {
             // Variable para guardar todo el HTML que vamos a crear
             var html_Completo = '';
             
-            // Recorrer cada álbum uno por uno
-            for (var indice = 0; indice < albumesParaMostrar.length; indice++) {
-                // Guardar el álbum actual en una variable
-                var album_Actual = albumesParaMostrar[indice];
+            // Recorrer cada album uno por uno
+            for (var indice = 0; indice < albumes_kayne.length; indice++) {
+                // Guardar el album actual en una variable
+                var album_Actual = albumes_kayne[indice];
                 
                 //OBTENER DATOS ALBUM
                 // titulo
@@ -167,8 +167,8 @@
                 // año
                 var album_Año = 'N/A';
                 if (album_Actual.releaseDate) {
-                    var fechaCompleta = new Date(album_Actual.releaseDate);
-                    album_Año = fechaCompleta.getFullYear();
+                    var fecha = new Date(album_Actual.releaseDate);
+                    album_Año = fecha.getFullYear();
                 }
                 
                 // numero canciones
@@ -200,7 +200,7 @@
 
         // FUNCION PARA LAS FRASES DE KANYE
         function obtenerFrase() {
-            // Deshabilitar el botón para que no se pueda hacer click varias veces
+            // Deshabilitar el botón, para que no haga click varias veces
             var boton_Kanye_Frases = $('#quote-btn');
             boton_Kanye_Frases.prop('disabled', true);
             

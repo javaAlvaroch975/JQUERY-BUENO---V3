@@ -6,7 +6,7 @@
 
 body {
     font-family: Arial, sans-serif;
-    background-color: #667eea;
+    background-color: #8B4513;
     min-height: 100vh;
     padding: 20px;
 }
@@ -35,7 +35,7 @@ header p {
 
 .nav-btn {
     display: inline-block;
-    background-color: #9b59b6;
+    background-color: #C41E3A;
     color: white;
     padding: 12px 30px;
     text-decoration: none;
@@ -44,7 +44,7 @@ header p {
 }
 
 .nav-btn:hover {
-    background-color: #8e44ad;
+    background-color: #A01729;
 }
 
 .loader {
@@ -105,7 +105,7 @@ header p {
 }
 
 .album-artist {
-    color: #667eea;
+    color: #C41E3A;
     font-size: 0.95em;
     margin-bottom: 10px;
     font-weight: 600;
@@ -128,7 +128,7 @@ header p {
 
 .album-link {
     display: block;
-    background-color: #667eea;
+    background-color: #C41E3A;
     color: white;
     padding: 10px 15px;
     text-decoration: none;
@@ -137,7 +137,7 @@ header p {
 }
 
 .album-link:hover {
-    background-color: #764ba2;
+    background-color: #A01729;
 }
 
 .error {
@@ -170,7 +170,7 @@ header p {
 }
 
 .quote-btn {
-    background-color: #ff6b6b;
+    background-color: #C41E3A;
     color: white;
     padding: 12px 30px;
     border: none;
@@ -181,7 +181,7 @@ header p {
 }
 
 .quote-btn:hover {
-    background-color: #ff5252;
+    background-color: #A01729;
 }
 
 .quote-display {
@@ -191,5 +191,5 @@ header p {
     padding: 20px;
     min-height: 40px;
     background-color: rgba(255, 255, 255, 0.1);
-    border-left: 4px solid #ff6b6b;
+    border-left: 4px solid #C41E3A;
 }

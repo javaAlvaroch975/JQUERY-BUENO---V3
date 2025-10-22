@@ -200,7 +200,7 @@
 
         // FUNCION PARA LAS FRASES DE KANYE
         function obtenerFrase() {
-            // Deshabilitar el botón, para que no haga click varias veces
+            // Desactivar el boton, para que no haga click varias veces
             var boton_Kanye_Frases = $('#quote-btn');
             boton_Kanye_Frases.prop('disabled', true);
             
@@ -211,7 +211,7 @@
             // URL de la API de frases de Kanye
             var api_Frases_Kanye = 'https://api.kanye.rest/';
             
-            // Hacer la petición a la API
+            // Hacer la peticion a la API
             fetch(api_Frases_Kanye)
                 .then(function(rep_API) {
                     // Verificar si la respuesta está bien
@@ -237,7 +237,7 @@
                         frases_Aviso.text('No se pudo obtener la frase');
                     }
                     
-                    // Volver a habilitar el botón
+                    // Volver a habilitar el boton
                     boton_Kanye_Frases.prop('disabled', false);
                 })
                 .catch(function(error_consola) {

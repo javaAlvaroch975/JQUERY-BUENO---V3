@@ -11,7 +11,7 @@
     <div class="container">
         <h1>🎵 ¿Te gusta esta cancion? 🎵</h1>
         <p class="subtitle">Vota</p>
-        <a href="index.html" class="back-btn">⬅️ Volver a Álbumes</a>
+        <a href="index.html" class="back-btn">⬅ Volver a Index</a>
 
         <div class="loader" id="loader">Obteniendo cancion</div>
         <div class="message" id="message"></div>
@@ -25,22 +25,16 @@
 
             <form id="voteForm">
                 <div class="form-group">
-                    <label>¿Te gusta esta canción?</label>
+                    <label>¿Te gusta esta cancion?</label>
                     <div class="vote-options">
-                        <button type="button" class="vote-btn yes" data-vote="si">
-                            Si
-                        </button>
-                        <button type="button" class="vote-btn no" data-vote="no">
-                            No
-                        </button>
+                        <button type="button" class="vote-btn yes" data-vote="si">Si</button>
+                        <button type="button" class="vote-btn no" data-vote="no">No</button>
                     </div>
                 </div>
 
                 <input type="hidden" id="voteInput" value="">
 
-                <button type="submit" class="submit-btn" id="submitBtn">
-                    Enviar voto
-                </button>
+                <button type="submit" class="submit-btn" id="submitBtn">Enviar voto</button>
             </form>
 
             <div class="stats" id="stats">
@@ -55,8 +49,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script>
         // VARIABLES VOTACION (GLOBALES)
-        let votoSeleccionado = null;
-        let votos = {
+        var voto_Elegido = null;
+        var votos = {
             si: 0,
             no: 0
         };
@@ -67,7 +61,7 @@
             
             // Seleccionar voto
             $('.vote-btn').click(function() {
-                seleccionarVoto($(this));
+                elegirVoto($(this));
             });
 
             // Mandar voto a formulario
@@ -108,7 +102,7 @@
                     success: function(data) {
                         if (data.results && data.results.length > 0) {
                             // Coger cancion random
-                            let cancionAleatoria = data.results[Math.floor(Math.random() * data.results.length)];
+                            var cancionAleatoria = data.results[Math.floor(Math.random() * data.results.length)];
                             resolve(cancionAleatoria);
                         } else {
                             reject('No se encontraron canciones'); // si no las coge o no quedan
@@ -129,13 +123,13 @@
             $('#songAlbum').text(cancion.collectionName || 'Álbum desconocido');
             
             // Quitar elegido
-            votoSeleccionado = null;
+            voto_Elegido = null;
             $('#voteInput').val('');
             $('.vote-btn').removeClass('selected');
         }
 
         // ELEGIR VOTO
-        function seleccionarVoto(boton) {
+        function elegirVoto(boton) {
             // Quitar seleccionado por si acaso otra vez
             $('.vote-btn').removeClass('selected');
             
@@ -143,15 +137,15 @@
             boton.addClass('selected');
             
             // Guardar el voto
-            votoSeleccionado = boton.data('vote');
-            $('#voteInput').val(votoSeleccionado);
+            voto_Elegido = boton.data('vote');
+            $('#voteInput').val(voto_Elegido);
             
-            console.log('Voto seleccionado:', votoSeleccionado);
+            console.log('Voto seleccionado:', voto_Elegido);
         }
 
         //ENVIAR VOTO
         function enviarVoto() {
-            if (!votoSeleccionado) {
+            if (!voto_Elegido) {
                 mostrarMensaje('Por favor, selecciona un voto', 'error');
                 return;
             }
@@ -159,12 +153,12 @@
             // Evitar doble voto antes de que cambie de cancion
             $('#submitBtn').prop('disabled', true);
 
-            guardarVoto(votoSeleccionado)
+            guardarVoto(voto_Elegido)
                 .then(function(respuesta) {
                     console.log('Voto guardado:', respuesta);
                     
                     // Actualizar contador
-                    if (votoSeleccionado === 'si') {
+                    if (voto_Elegido === 'si') {
                         votos.si++;
                     } else {
                         votos.no++;
@@ -174,7 +168,7 @@
                     mostrarMensaje('Voto enviado', 'success');
                     
                     // Actualizar estadísticas
-                    actualizarEstadisticas();
+                    actualizarStats();
                     
                     // Cargar cancion cada 2s
                     setTimeout(function() {
@@ -215,8 +209,8 @@
         }
 
         // ACTUALIZAR TODAS LAS ESTADISTICAS
-        function actualizarEstadisticas() {
-            let total = votos.si + votos.no;
+        function actualizarStats() {
+            var total = votos.si + votos.no;
             $('#votos_Totales').text(total);
             $('#votos_Buenos').text(votos.si);
             $('#votos_Malos').text(votos.no);
